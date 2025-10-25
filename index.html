@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudip JPEG | Photographer & Filmmaker</title>
+
+    <!-- Swiper JS for Carousel -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Google Fonts: Montserrat & Bebas Neue -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-red: #E50914;
+            --dark-bg: #141414;
+            --text-light: #f5f5f5;
+            --text-dark: #808080;
+            --card-bg: #1f1f1f;
+            --gemini-purple: #8E44AD;
+        }
+
+        /* Basic Reset & Smooth Scrolling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden; /* CRITICAL FIX: Prevents horizontal scroll */
+        }
+        
+        /* Page Display Logic */
+        .page-content {
+            display: none;
+        }
+        .page-content.active {
+            display: block;
+        }
+
+        /* Utility Classes */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 0;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+        
+        h2 {
+           font-size: 2.5rem;
+           border-left: 4px solid var(--primary-red);
+           padding-left: 1rem;
+           margin-bottom: 2rem;
+        }
+
+        /* --- Header & Navigation --- */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 5%;
+            background: var(--dark-bg);
+            border-bottom: 1px solid #222;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            gap: 1rem; /* Add gap for wrapped items */
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--primary-red);
+            text-decoration: none;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap; /* Allow nav links to wrap */
+            justify-content: center; /* Center links when they wrap */
+            gap: 0.5rem 1rem; /* row-gap column-gap */
+        }
+
+        .nav-links li {
+            margin-left: 0; /* Remove original margin */
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-links a:hover, .nav-links a.active-link {
+            color: var(--primary-red);
+        }
+        
+        .menu-toggle {
+            display: none !important; /* CRITICAL FIX: Ensure hamburger is always hidden */
+        }
+        
+        /* --- Hero Section --- */
+        #hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover;
+            color: #fff;
+        }
+
+        #hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 1rem;
+        }
+
+        .hero-content h1 {
+            font-size: 6rem;
+            line-height: 1.1;
+            margin: 0;
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        /* --- Portfolio Section --- */
+        .portfolio-category .swiper-slide {
+             width: 320px;
+             height: 480px;
+             background-size: cover;
+             background-position: center;
+        }
+        .view-all-btn {
+            display: block;
+            text-align: right;
+            margin-top: 1rem;
+            color: var(--primary-red);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+        .view-all-btn:hover {
+            color: #fff;
+        }
+        
+        /* --- Dedicated Gallery Pages --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .gallery-item img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        /* --- Shortfilms Section --- */
+        .shortfilms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+        }
+
+        .film-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .film-video { position: relative; padding-top: 56.25%; }
+        .film-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .film-info { padding: 1.5rem; }
+        .film-info h3 { color: var(--primary-red); margin-bottom: 0.5rem; }
+        .film-info .description { min-height: 60px; }
+        
+        /* --- Gemini & Other Sections --- */
+        .btn-gemini { background-color: var(--gemini-purple); color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 500; margin-top: 1rem; transition: background-color 0.3s ease; }
+        .btn-gemini:hover { background-color: #7d3c98; }
+        .btn-gemini:disabled { background-color: #555; cursor: not-allowed; }
+        .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--gemini-purple); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; margin-left: 10px; vertical-align: middle; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .ai-input { width: 100%; padding: 0.8rem; background: #333; border: 1px solid #555; border-radius: 5px; color: var(--text-light); font-size: 1rem; margin-bottom: 1rem; }
+        .about-content { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: center; }
+        .about-image img { width: 100%; max-width: 400px; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 10px; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .service-card { background-color: var(--card-bg); padding: 2rem; border-radius: 10px; border-bottom: 3px solid transparent; transition: all 0.3s ease; }
+        .service-card:hover { transform: translateY(-10px); border-bottom-color: var(--primary-red); }
+        .service-card h3 { color: var(--primary-red); font-size: 2rem; }
+        .price { font-size: 1.8rem; font-weight: bold; margin: 1rem 0; }
+        .price span { font-size: 1rem; font-weight: normal; color: var(--text-dark); }
+        .service-card ul { list-style: none; margin-bottom: 1.5rem; }
+        .service-card ul li { margin-bottom: 0.5rem; position: relative; padding-left: 20px; }
+        .service-card ul li::before { content: '✓'; color: var(--primary-red); position: absolute; left: 0; }
+        .contact-form { max-width: 700px; margin: 0 auto; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group input, .form-group textarea { width: 100%; padding: 1rem; background: var(--card-bg); border: 1px solid #333; border-radius: 5px; color: var(--text-light); font-size: 1rem; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-red); }
+        .btn-primary { display: inline-block; background-color: var(--primary-red); color: #fff; padding: 1rem 2rem; text-decoration: none; border-radius: 5px; border: none; cursor: pointer; font-family: 'Bebas Neue', cursive; font-size: 1.2rem; letter-spacing: 1px; transition: background-color 0.3s ease; }
+        .btn-primary:hover { background-color: #c40812; }
+
+        /* Social Links */
+        .social-links { margin-top: 2rem; }
+        .social-links h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+        .social-icons { display: flex; gap: 1.5rem; }
+        .social-icons a { color: var(--text-light); transition: color 0.3s ease; }
+        .social-icons a:hover { color: var(--primary-red); }
+        .social-icons svg { width: 28px; height: 28px; }
+        
+        /* --- Footer --- */
+        footer { text-align: center; padding: 2rem 0; background-color: #101010; color: var(--text-dark); font-size: 0.9rem; margin-top: 4rem; }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 1024px) {
+             .nav-links {
+                flex-grow: 1;
+                justify-content: flex-end;
+             }
+        }
+        
+        @media (max-width: 860px) {
+            .navbar {
+                flex-direction: column; /* Stack logo and nav links */
+                align-items: center;
+                gap: 1.5rem;
+            }
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 2.5rem 0; }
+            .hero-content h1 { font-size: 3.5rem; line-height: 1.2;}
+            .hero-content p { font-size: 1.1rem; }
+            h2 { font-size: 2.2rem; }
+
+            .portfolio-category .swiper-slide {
+                width: 280px;
+                height: 420px;
+            }
+
+            .shortfilms-grid, .gallery-grid, .about-content, .services-grid { 
+                grid-template-columns: 1fr;
+            }
+            .about-content {
+                text-align: center;
+            }
+            .about-image {
+                margin: 0 auto 2rem;
+            }
+             .social-icons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header" id="mainHeader">
+        <nav class="navbar">
+            <a class="logo nav-action" data-page="home" href="#hero">SJ</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a class="nav-action active-link" data-page="home" href="#hero">Home</a></li>
+                <li><a class="nav-action" data-page="portraits-gallery">Portraits</a></li>
+                <li><a class="nav-action" data-page="landscapes-gallery">Landscapes</a></li>
+                <li><a class="nav-action" data-page="shortfilms-gallery">Shortfilms</a></li>
+                <li><a class="nav-action" data-page="home" href="#about">About</a></li>
+                <li><a class="nav-action" data-page="home" href="#services">Services</a></li>
+                <li><a class="nav-action" data-page="home" href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Main Page Content (Single Page Scroll) -->
+        <div id="page-home" class="page-content active">
+            <section id="hero">
+                <div class="hero-content">
+                    <h1>Sudip JPEG</h1>
+                    <p>Photographer & Filmmaker</p>
+                </div>
+            </section>
+            
+            <section id="portfolio" class="container">
+                 <div class="portfolio-category">
+                    <h2>Portraits</h2>
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                             <div class="swiper-slide" style="background-image:url('https://i.postimg.cc/Fscr4Vyv/DSC-1468.jpg')"></div>
+                             <div class="swiper-slide" style="background-image:url('https://i.postimg.cc/d1GZsYqg/DSC07309.jpg')"></div>
+                             <div class="swiper-slide" style="background-image:url('https://i.postimg.cc/PqYgXJ5M/IMG-20250320-162710-Copy.jpg')"></div>
+                             <div class="swiper-slide" style="background-image:url('https://i.postimg.cc/x8P8M8Bv/DSC07287-Copy.jpg')"></div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                    <a class="view-all-btn nav-action" data-page="portraits-gallery">View All Portraits &rarr;</a>
+                </div>
+                 <div class="portfolio-category">
+                    <h2>Landscapes</h2>
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" style="background-image:url(https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=900&h=600&auto=format&fit=crop)"></div>
+                            <div class="swiper-slide" style="background-image:url(https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=900&h=600&auto=format&fit=crop)"></div>
+                            <div class="swiper-slide" style="background-image:url(https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=900&h=600&auto=format&fit=crop)"></div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                     <a class="view-all-btn nav-action" data-page="landscapes-gallery">View All Landscapes &rarr;</a>
+                </div>
+            </section>
+            
+             <section id="shortfilms" class="container">
+                <h2>Shortfilms</h2>
+                <div class="shortfilms-grid">
+                    <div class="film-card">
+                        <div class="film-video"><iframe src="https://www.youtube.com/embed/8bRtqUO9I5o" allowfullscreen></iframe></div>
+                        <div class="film-info">
+                            <h3 id="film-title-1">My Short Film 1</h3>
+                            <p class="description" id="film-desc-1">A description of your first short film.</p>
+                            <button class="btn-gemini" onclick="generateFilmDescription('film-title-1', 'film-desc-1', this)">✨ Generate Description</button>
+                        </div>
+                    </div>
+                    <div class="film-card">
+                        <div class="film-video"><iframe src="https://www.youtube.com/embed/p3mQIXbGHew" allowfullscreen></iframe></div>
+                        <div class="film-info">
+                            <h3 id="film-title-2">My Short Film 2</h3>
+                            <p class="description" id="film-desc-2">A description of your second short film.</p>
+                            <button class="btn-gemini" onclick="generateFilmDescription('film-title-2', 'film-desc-2', this)">✨ Generate Description</button>
+                        </div>
+                    </div>
+                </div>
+                 <a class="view-all-btn nav-action" data-page="shortfilms-gallery">View All Shortfilms &rarr;</a>
+            </section>
+            
+             <section id="about" class="container">
+                <div class="about-content">
+                    <div class="about-image"><img src="https://i.postimg.cc/CKF23BX4/sudip-editz.jpg" alt="Photo of Sudip"></div>
+                    <div class="about-text">
+                        <h2>About Me</h2>
+                        <p id="bio-p1">I am a passionate photographer and filmmaker with a love for telling stories through compelling images. Whether it's a dramatic landscape or an intimate portrait, I strive to find the cinematic quality in every moment.</p>
+                        <p id="bio-p2">My work is driven by curiosity and a desire to explore the narratives that unfold around us. I believe every picture should feel like a scene from a movie, evoking emotion and inspiring imagination.</p>
+                        <div class="gemini-feature" style="margin-top: 2rem;">
+                             <input type="text" id="bio-keywords" class="ai-input" placeholder="Enter keywords (e.g. passionate, cinematic, Kolkata)">
+                             <button class="btn-gemini" id="generate-bio-btn">✨ Write My Bio with AI</button>
+                        </div>
+                        <div class="social-links">
+                            <h3>Follow Me</h3>
+                            <div class="social-icons">
+                                <a href="#" target="_blank">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163zm0 1.802C8.843 3.965 8.547 3.977 7.333 4.029c-2.459.112-3.647 1.309-3.759 3.759-.052 1.214-.063 1.51-.063 4.212s.011 2.998.063 4.212c.112 2.45 1.3 3.647 3.759 3.759 1.214.052 1.51.063 4.212.063s2.998-.011 4.212-.063c2.459-.112 3.647-1.309 3.759-3.759.052-1.214.063-1.51.063-4.212s-.011-2.998-.063-4.212c-.112-2.45-1.3-3.647-3.759-3.759-1.214-.052-1.51-.063-4.212-.063zM12 7.288c-2.61 0-4.712 2.102-4.712 4.712s2.102 4.712 4.712 4.712 4.712-2.102 4.712-4.712S14.61 7.288 12 7.288zm0 7.622c-1.603 0-2.91-1.307-2.91-2.91s1.307-2.91 2.91-2.91 2.91 1.307 2.91 2.91-1.307 2.91-2.91 2.91zm4.39-7.382c-.525 0-.95.425-.95.95s.425.95.95.95.95-.425.95-.95-.425-.95-.95-.95z"/></svg>
+                                </a>
+                                <a href="#" target="_blank">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </a>
+                                <a href="#" target="_blank">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.196h3.312z"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+             <section id="services" class="container">
+                <h2>Services</h2>
+                <div class="services-grid">
+                    <div class="service-card"><h3>Portrait Sessions</h3><div class="price">$350 <span>/ session</span></div><ul><li>1-2 Hour Session</li><li>20 Professionally Edited Photos</li><li>Online Gallery</li><li>2 Locations</li></ul><a href="#contact" class="btn-primary">Book Now</a></div>
+                    <div class="service-card"><h3>Event Photography</h3><div class="price">$1200 <span>/ event</span></div><ul><li>Up to 6 Hours Coverage</li><li>200+ Edited Photos</li><li>Online Gallery & Slideshow</li><li>Second Shooter Available</li></ul><a href="#contact" class="btn-primary">Book Now</a></div>
+                    <div class="service-card"><h3>Commercial Work</h3><div class="price">Custom <span>/ project</span></div><ul><li>Product & Brand Photography</li><li>High-Resolution Images</li><li>Full Usage Rights</li><li>Consultation & Shot List</li></ul><a href="#contact" class="btn-primary">Get a Quote</a></div>
+                </div>
+            </section>
+            
+             <section id="contact" class="container">
+                 <h2>Get in Touch</h2>
+                <form class="contact-form">
+                    <div class="form-group"><input type="text" name="name" placeholder="Your Name" required></div>
+                    <div class="form-group"><input type="email" name="email" placeholder="Your Email" required></div>
+                    <div class="form-group"><input type="text" name="subject" placeholder="Subject" required></div>
+                    <div class="form-group"><textarea name="message" rows="5" placeholder="Your Message" required></textarea></div>
+                    <button type="submit" class="btn-primary">Send Message</button>
+                </form>
+            </section>
+        </div>
+
+        <!-- Portraits Gallery Page -->
+        <div id="page-portraits-gallery" class="page-content">
+            <div class="container">
+                <h2>Portraits Gallery</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item"><img src="https://i.postimg.cc/Fscr4Vyv/DSC-1468.jpg" alt="Portrait 1"></div>
+                    <div class="gallery-item"><img src="https://i.postimg.cc/d1GZsYqg/DSC07309.jpg" alt="Portrait 2"></div>
+                    <div class="gallery-item"><img src="https://i.postimg.cc/PqYgXJ5M/IMG-20250320-162710-Copy.jpg" alt="Portrait 3"></div>
+                    <div class="gallery-item"><img src="https://i.postimg.cc/x8P8M8Bv/DSC07287-Copy.jpg" alt="Portrait 4"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Landscapes Gallery Page -->
+        <div id="page-landscapes-gallery" class="page-content">
+            <div class="container">
+                <h2>Landscapes Gallery</h2>
+                 <div class="gallery-grid">
+                    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=800&h=600&auto=format&fit=crop" alt="Landscape 1"></div>
+                    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=800&h=600&auto=format&fit=crop" alt="Landscape 2"></div>
+                    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=800&h=600&auto=format&fit=crop" alt="Landscape 3"></div>
+                    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?q=80&w=800&h=600&auto=format&fit=crop" alt="Landscape 4"></div>
+                 </div>
+            </div>
+        </div>
+
+        <!-- Shortfilms Gallery Page -->
+        <div id="page-shortfilms-gallery" class="page-content">
+            <div class="container">
+                <h2>Shortfilms Gallery</h2>
+                <div class="shortfilms-grid">
+                    <div class="film-card"><div class="film-video"><iframe src="https://www.youtube.com/embed/8bRtqUO9I5o" allowfullscreen></iframe></div><div class="film-info"><h3>My Short Film 1</h3></div></div>
+                    <div class="film-card"><div class="film-video"><iframe src="https://www.youtube.com/embed/p3mQIXbGHew" allowfullscreen></iframe></div><div class="film-info"><h3>My Short Film 2</h3></div></div>
+                    <div class="film-card"><div class="film-video"><iframe src="https://www.youtube.com/embed/cSeFMIuqktk" allowfullscreen></iframe></div><div class="film-info"><h3>My Short Film 3</h3></div></div>
+                    <div class="film-card"><div class="film-video"><iframe src="https://www.youtube.com/embed/ZpygXOWRLiw" allowfullscreen></iframe></div><div class="film-info"><h3>My Short Film 4</h3></div></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Sudip JPEG. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            var swiper = new Swiper('.swiper-container', {
+                slidesPerView: 'auto',
+                spaceBetween: 15,
+                grabCursor: true,
+                pagination: { el: '.swiper-pagination', clickable: true },
+                loop: true,
+            });
+            
+            const navActions = document.querySelectorAll('.nav-action');
+            const pages = document.querySelectorAll('.page-content');
+            const mainHeader = document.getElementById('mainHeader');
+
+            function showPage(pageId, targetHref) {
+                if (pageId.includes('gallery')) {
+                    document.getElementById('page-home').style.display = 'none';
+                    pages.forEach(p => p.classList.toggle('active', p.id === `page-${pageId}`));
+                    window.scrollTo(0, 0);
+                } else {
+                    document.getElementById('page-home').style.display = 'block';
+                    pages.forEach(p => p.classList.remove('active'));
+                    if (targetHref && document.querySelector(targetHref)) {
+                       setTimeout(() => { 
+                           document.querySelector(targetHref).scrollIntoView({ behavior: 'smooth' });
+                       }, 50);
+                    }
+                }
+
+                document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active-link'));
+                const activeLink = document.querySelector(`.nav-links a[data-page='${pageId}']`) || document.querySelector(`.nav-links a[href='${targetHref}']`);
+                if (activeLink) activeLink.classList.add('active-link');
+            }
+
+            navActions.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = e.currentTarget.dataset.page;
+                    const href = e.currentTarget.getAttribute('href');
+                    showPage(pageId, href);
+                });
+            });
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) mainHeader.classList.add('scrolled');
+                else mainHeader.classList.remove('scrolled');
+            });
+
+            // Your Gemini functions can be re-added here if needed.
+        });
+    </script>
+</body>
+</html>
